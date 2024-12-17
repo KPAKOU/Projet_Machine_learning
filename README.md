@@ -62,11 +62,16 @@ Avec `ENERYSTARScore` le modèle le plus performant est le `RandomForest`
 
 
 ## Auteurs
-KPAKOU M’Mounéné , ISE2 ENSAE
-Oumar Farouk, ISE2 ENSAE
-Gnalen Sangaré, ISE2 ENSAE
-ADAM ALASSANE Ibrahim, ISE2 ENSAE
-## Sous la supervision 
+KPAKOU M’Mounéné , ISE2 ENSAE  
+
+Oumar Farouk, ISE2 ENSAE   
+
+Gnalen Sangaré, ISE2 ENSAE    
+
+ADAM ALASSANE Ibrahim, ISE2 ENSAE  
+
+## Sous la supervision de: 
+
 Mme Mously Diaw ,ML Engineer
 
 
