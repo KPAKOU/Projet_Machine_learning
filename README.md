@@ -56,6 +56,43 @@ Avec `ENERYSTARScore` le modèle le plus performant est le `RandomForest`
 2. **Installer les dependences**: `pip install -r requirements.txt`
 3. **Exectuer les notebooks**: `jupyter notebook`
 
+## Execution de l'application en local
+## Objectifs de l'application 
+🎯Objectif de l'application
+Cette application vise à prédire la consommation énergétique des bâtiments non résidentiels à Seattle, afin de contribuer à l'objectif de neutralité carbone de la ville d'ici 2050.
+
+📶Étapes de l'application
+Importez et visualisez les données dans la section Présentation des données.
+Explorez les relations entre les variables grâce à des visualisations interactives.
+Passez à la section Prédiction pour effectuer une prédiction basée sur les caractéristiques du bâtiment.
+📚Pages de l'application
+Accueil : Présentation de l'application.
+Présentation des données : Exploration des données.
+Prédiction : Estimation de la consommation énergétique.
+ 
+Pour executer l'application suivre les étapes suivantes: se positionner dans le dossier `appli`
+Executer d'abord
+```
+uvicorn tpi:app --reload
+```
+Ensuite
+```
+streamlit run global.py
+```
+
+OR, 
+```
+python run_app.py
+```
+
+
+## Cloud Deployment
+
+
+[Streamlit App](https://seattlepredictensae.streamlit.app/)
+## Lien de la présentation
+[Presentation](https://www.canva.com/design/DAGZYE91Fi0/fbresYBuezWW_vEEy6Z_dQ/edit?utm_content=DAGZYE91Fi0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 
 ## Remerciements 
 - Ce projet a été réalisé dans le cadre du cours de Machine learning.
