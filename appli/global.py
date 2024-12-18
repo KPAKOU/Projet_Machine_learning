@@ -11,7 +11,7 @@ from PIL import Image
 st.set_page_config(page_title="Prédiction de consommation d'énergie",page_icon="🌆",layout="wide"
 )
 
-image=Image.open('Seattle.png')
+image=Image.open('appli/Seattle.png')
 
 # Barre latérale pour la navigation
 with st.sidebar:
