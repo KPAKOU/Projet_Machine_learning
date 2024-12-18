@@ -8,7 +8,7 @@ import requests
 from PIL import Image
 
 # Configuration de l'application
-st.set_page_config(page_title="Prédiction de Consommation d'Énergie",page_icon="🌆",layout="wide"
+st.set_page_config(page_title="Prédiction de consommation d'énergie",page_icon="🌆",layout="wide"
 )
 
 image=Image.open('Seattle.png')
@@ -16,7 +16,7 @@ image=Image.open('Seattle.png')
 # Barre latérale pour la navigation
 with st.sidebar:
     st.image(image, width=200)
-    pages = ["Accueil", "Présentation des données", "Prédiction"]
+    pages = ["🏠Accueil", "🗂️Présentation des données", "📉Prédiction"]
     page = st.sidebar.radio("", pages)
     file = st.sidebar.file_uploader("Importer un fichier (CSV ou Excel)", type=["csv", "xlsx"])
 
@@ -32,23 +32,23 @@ else:
     st.sidebar.warning("Veuillez importer un fichier pour commencer.")
 
 
-if page == "Accueil":
-    st.title("🌆 Prédiction de la Consommation d'Énergie des Bâtiments à Seattle")
+if page == "🏠Accueil":
+    st.title("🌆 Prédiction de la consommation d'énergie des bâtiments à Seattle")
     st.markdown("""
-            ### Objectif de l'Application
+            ### 🎯Objectif de l'application
             Cette application vise à prédire la consommation énergétique des bâtiments non résidentiels à Seattle, afin de contribuer à l'objectif de neutralité carbone de la ville d'ici 2050.
 
-            ### Étapes de l'Application
-            1. Importez et visualisez les données dans la section **Présentation et Visualisation des Données**.
+            ### 📶Étapes de l'application
+            1. Importez et visualisez les données dans la section **Présentation des données**.
             2. Explorez les relations entre les variables grâce à des visualisations interactives.
             3. Passez à la section **Prédiction** pour effectuer une prédiction basée sur les caractéristiques du bâtiment.
             
-            ### Pages de l'Application
-            - **Accueil**: Présentation de l'application.
-            - **Présentation et Visualisation des Données**: Analyse exploratoire des données.
-            - **Prédiction**: Estimation de la consommation énergétique.
+            ### 📚Pages de l'application
+            - **Accueil** : Présentation de l'application.
+            - **Présentation des données** : Exploration des données.
+            - **Prédiction** : Estimation de la consommation énergétique.
         """)        
-elif page == "Présentation des données":
+elif page == "🗂️Présentation des données":
     st.title("📊 Présentation des données")
     if st.checkbox("Aperçu des données"):
                     num_rows = st.slider("Nombre de lignes à afficher", min_value=5, max_value=25, value=10)
@@ -68,93 +68,104 @@ elif page == "Présentation des données":
                             st.table(cat_cols[:st.slider("Nombre à afficher", 1, len(cat_cols), 5)])
 
     # Statistiques descriptives globales
-    st.write("##### Statistiques descriptives des variables numériques")
+    st.write("##### 🧾Statistiques descriptives des variables numériques")
     num_cols = df.select_dtypes(include=["number"])
     if not num_cols.empty:
                     st.write(num_cols.describe())
     else:
                     st.write("Aucune variable numérique disponible.")
 
+
+
+    # Initialisation de l'état
+    if 'active_analysis' not in st.session_state:
+        st.session_state.active_analysis = None
+
     col1, col2, col3 = st.columns(3)
 
-            # Variables pour suivre le choix
+    # Boutons pour sélectionner le type d'analyse
     with col1:
-                unib = st.button("Analyse univariée")
+        if st.button("Analyse univariée"):
+            st.session_state.active_analysis = "unib"
     with col2:
-                bib = st.button("Analyse bivariée")
+        if st.button("Analyse bivariée"):
+            st.session_state.active_analysis = "bib"
     with col3:
-                multib= st.button("Analyse multivariée")
+        if st.button("Analyse multivariée"):
+            st.session_state.active_analysis = "multib"
 
-    if unib:
-                st.write("---")
-                st.subheader("🔍 Analyse univariée")
-                st.write("---")
-                st.write("##### Variables numériques")
-                cat_cols = df.select_dtypes(include=["object", "category"])
-                num_col = st.selectbox("Sélectionnez une variable numérique", num_cols.columns)
+    # Affichage en fonction du type d'analyse activé
+    if st.session_state.active_analysis == "unib":
+        st.write("---")
+        st.subheader("🔍Analyse univariée")
+        st.write("---")
+        st.write("##### Variables numériques")
+        num_col = st.selectbox("Sélectionnez une variable numérique", num_cols.columns)
 
-                if num_col:
-                        fig = px.box(df, y=num_col, color_discrete_sequence=["green"])
-                        fig.update_layout(title=f"Boxplot - {num_col}")
-                        st.plotly_chart(fig)
-                
-                st.write("---")
-                st.write("##### Variables catégorielles")
-                cat_var = st.selectbox("Sélectionnez une variable catégorielle", cat_cols.columns)
-                fig = px.pie(df, names=cat_var, hole=0.4)
-                st.plotly_chart(fig)
-            
-    elif bib:
-                st.write("---")
-                st.subheader("Analyse bivariée")
-                st.write("---")
-                st.write("##### Relations entre deux variables numériques")
-                num_col1 = st.selectbox("Variable numérique 1", num_cols.columns, key="num1")
-                num_col2 = st.selectbox("Variable numérique 2", num_cols.columns, key="num2")
+        if num_col:
+            fig = px.box(df, y=num_col, color_discrete_sequence=["green"])
+            fig.update_layout(title=f"Boxplot - {num_col}")
+            st.plotly_chart(fig)
 
-                if num_col1 and num_col2:
-                    fig, ax = plt.subplots()
-                    sns.scatterplot(x=df[num_col1], y=df[num_col2], ax=ax)
-                    ax.set_title(f"Nuage de points - {num_col1} vs {num_col2}")
-                    st.pyplot(fig)
+        st.write("---")
+        st.write("##### Variables catégorielles")
+        cat_cols = df.select_dtypes(include=["object", "category"])
+        cat_var = st.selectbox("Sélectionnez une variable catégorielle", cat_cols.columns)
+        if cat_var:
+            fig = px.pie(df, names=cat_var, hole=0.4)
+            st.plotly_chart(fig)
 
-                st.write("##### Relations entre une variable numérique et une catégorielle")
-                cat_cols = df.select_dtypes(include=["object", "category"])
-                num_col = st.selectbox("Variable numérique", num_cols.columns, key="num_cat")
-                cat_col = st.selectbox("Variable catégorielle", cat_cols.columns, key="cat_num")
-                if num_col and cat_col:
-                    fig, ax = plt.subplots()
-                    sns.boxplot(x=df[cat_col], y=df[num_col], ax=ax)
-                    ax.set_title(f"Boxplot - {num_col} par {cat_col}")
-                    ax.set_xticklabels(ax.get_xticklabels(), rotation=90)  # Rotation verticale des étiquettes
-                    st.pyplot(fig)
+    elif st.session_state.active_analysis == "bib":
+        st.write("---")
+        st.subheader("🔗📈Analyse bivariée")
+        st.write("---")
+        st.write("##### 🔗Relations entre deux variables numériques")
+        num_col1 = st.selectbox("Variable numérique 1", num_cols.columns, key="num1")
+        num_col2 = st.selectbox("Variable numérique 2", num_cols.columns, key="num2")
 
-    elif multib:
-                st.write("---")
-                st.subheader("Analyse multivariée")
-                st.write("---")
-                num_cols = df.select_dtypes(include=['float64', 'int64'])
-                st.write("##### Heatmap de corrélation")
-                heatmap_cols = st.multiselect("Sélectionnez les colonnes à inclure dans la heatmap", num_cols.columns)
+        if num_col1 and num_col2:
+            fig, ax = plt.subplots()
+            sns.scatterplot(x=df[num_col1], y=df[num_col2], ax=ax)
+            ax.set_title(f"Nuage de points - {num_col1} vs {num_col2}")
+            st.pyplot(fig)
 
-                if heatmap_cols:
-                    corr = df[heatmap_cols].corr()  # Calcul des corrélations
-                    fig, ax = plt.subplots(figsize=(10, 8))
-                    sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
-                    ax.set_title("Matrice de corrélation")
-                    st.pyplot(fig)
-                else:
-                    st.write("Veuillez sélectionner au moins une colonne pour afficher la heatmap.")
+        st.write("##### 🔗Relations entre une variable numérique et une catégorielle")
+        cat_cols = df.select_dtypes(include=["object", "category"])
+        num_col = st.selectbox("Variable numérique", num_cols.columns, key="num_cat")
+        cat_col = st.selectbox("Variable catégorielle", cat_cols.columns, key="cat_num")
+        if num_col and cat_col:
+            fig, ax = plt.subplots()
+            sns.boxplot(x=df[cat_col], y=df[num_col], ax=ax)
+            ax.set_title(f"Boxplot - {num_col} par {cat_col}")
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+            st.pyplot(fig)
 
-                st.write("##### Pairplot")
-                pairplot_cols = st.multiselect("Sélectionnez les colonnes à inclure dans le pairplot", num_cols.columns)
-                if pairplot_cols:
-                        fig = sns.pairplot(df[pairplot_cols], diag_kind="kde", corner=True)
-                        st.pyplot(fig)
+    elif st.session_state.active_analysis == "multib":
+        st.write("---")
+        st.subheader("📊🔢Analyse multivariée")
+        st.write("---")
+        st.write("##### 🌡️🗺️Heatmap de corrélation")
+        heatmap_cols = st.multiselect("Sélectionnez les colonnes à inclure dans la heatmap", num_cols.columns)
+
+        if heatmap_cols:
+            corr = df[heatmap_cols].corr()
+            fig, ax = plt.subplots(figsize=(10, 8))
+            sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
+            ax.set_title("Matrice de corrélation")
+            st.pyplot(fig)
+        else:
+            st.write("Veuillez sélectionner au moins une colonne pour afficher la heatmap.")
+
+        st.write("##### 🔄📊Pairplot")
+        pairplot_cols = st.multiselect("Sélectionnez les colonnes à inclure dans le pairplot", num_cols.columns)
+        if pairplot_cols:
+            fig = sns.pairplot(df[pairplot_cols], diag_kind="kde", corner=True)
+            st.pyplot(fig)
 
 
-elif page == "Prédiction":
-    st.title("Prédiction de consommation d'énergie")
+
+elif page == "📉Prédiction":
+    st.title("🔮Prédiction de consommation d'énergie")
 
         # Définition les options des variables catégorielles
     building_types = ["CAMPUS", "NONRESIDENTIAL", "SPS-DISTRICT K-12"]
