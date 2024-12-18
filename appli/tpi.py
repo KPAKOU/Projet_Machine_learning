@@ -5,7 +5,7 @@ import numpy as np
 import joblib
 
 # Charger les modèles enregistrés
-random_model = joblib.load("random_best_model.pkl")
+random_model = joblib.load("appli/random_best_model.pkl")
 
 # Initialiser l'application FastAPI
 app = FastAPI(title="API de Prédiction de Consommation d'Énergie")
